@@ -1,6 +1,7 @@
 import { load } from "@loaders.gl/core"
 import { MVTLoader } from "@loaders.gl/mvt"
 import { useEffect } from "react"
+import * as tilebelt from "@mapbox/tilebelt"
 
 const tile: [number, number, number] = [1037490, 688385, 21] // x, y, zoom
 
@@ -12,8 +13,9 @@ const tileToURL = ([x, y, zoom]: [number, number, number]) => {
 function App() {
   useEffect(() => {
     ;(async () => {
-      const data = await load(tileToURL(tile), MVTLoader)
-      console.log(data)
+      const mvtLoaderData = await load(tileToURL(tile), MVTLoader)
+      const tilebeltData = tilebelt.tileToGeoJSON(tile)
+      console.log({ mvtLoaderData, tilebeltData })
     })()
   }, [])
 
