@@ -1,26 +1,23 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { load } from "@loaders.gl/core"
+import { MVTLoader } from "@loaders.gl/mvt"
+import { useEffect } from "react"
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const tile: [number, number, number] = [1037490, 688385, 21] // x, y, zoom
+
+const tileToURL = ([x, y, zoom]: [number, number, number]) => {
+  const url = `https://api.mapbox.com/v4/mapbox.mapbox-streets-v8/${zoom}/${x}/${y}.mvt?style=mapbox://styles/mapbox/light-v10@00&access_token=${process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}`
+  return url
 }
 
-export default App;
+function App() {
+  useEffect(() => {
+    ;(async () => {
+      const data = await load(tileToURL(tile), MVTLoader)
+      console.log(data)
+    })()
+  }, [])
+
+  return null
+}
+
+export default App
